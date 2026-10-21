@@ -2,7 +2,7 @@ services:
   snippetbox-nextjs:
     build:
       context: ../snippetbox-nextjs
-      dockerfile: ../snippetbox-docker/snippetbox/Dockerfile
+      dockerfile: ../snippetbox-docker/snippetbox-nextjs/Dockerfile
     image: snippetbox-nextjs:local
     container_name: snippetbox
     restart: unless-stopped
@@ -10,11 +10,14 @@ services:
       - "${PORT:-3000}:3000"
     environment:
       DATABASE_PATH: /data/snippetbox.db
-      COOKIE_SECURE: "false"
     volumes:
       - snippetbox-data:/data
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/ping"]
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/ping').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
       interval: 30s
       timeout: 3s
       start_period: 10s
