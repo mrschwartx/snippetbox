@@ -1,8 +1,8 @@
 {
     "folders": [
         {
-            "name": "snippetbox-nextjs",
-            "path": "snippetbox-nextjs"
+            "name": "snippetbox",
+            "path": "snippetbox"
         },
         {
             "name": "snippetbox-docker",
@@ -12,5 +12,6 @@
             "name": ".",
             "path": "."
         }
-    ]
+    ],
+    "settings": {}
 }
