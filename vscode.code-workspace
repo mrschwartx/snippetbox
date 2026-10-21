@@ -1,0 +1,16 @@
+{
+    "folders": [
+        {
+            "name": "snippetbox-nextjs",
+            "path": "snippetbox-nextjs"
+        },
+        {
+            "name": "snippetbox-docker",
+            "path": "snippetbox-docker"
+        },
+        {
+            "name": ".",
+            "path": "."
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+Role: You are senior software developer.
+
+Goal: Make SnippetBox application.
+SnippetBox: Share short text and code snippets. Modern web application.
+
+Tech Stack:
+- Nextjs TypeScript.
+- sqlite
+
+Todo:
+1. Write code snippetbox use Typescript.
+2. Use feature based in code snippetbox-nextjs.
+3. Use sqlite as database store.
+4. Implement testing unit, integration, e2e. (TDD/BDD).
+5. Write code without any comments
+6. Use English as convention code.
+7. Fix snippetbox-docker.
+8. Fix CI in .github
+9. Fix README.md
+
+Output:
+- Send me snippetbox.zip
