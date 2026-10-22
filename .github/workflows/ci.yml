@@ -22,32 +22,25 @@ jobs:
         working-directory: snippetbox
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: snippetbox/package-lock.json
-
       - name: Install
         run: npm ci
-
       - name: Lint
         run: npm run lint
-
       - name: Typecheck
         run: npm run typecheck
-
       - name: Unit, integration, UI and architecture tests with coverage
         run: npm run test:coverage
-
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: snippetbox/coverage
           retention-days: 7
-
       - name: Build
         run: npm run build
 
@@ -61,22 +54,17 @@ jobs:
         working-directory: snippetbox
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: snippetbox/package-lock.json
-
       - name: Install
         run: npm ci
-
       - name: Install browser
         run: npx playwright install --with-deps chromium
-
       - name: Run end-to-end tests
         run: npm run test:e2e:ci
-
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -94,9 +82,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-
       - uses: docker/setup-buildx-action@v3
-
       - name: Build image
         uses: docker/build-push-action@v6
         with:
@@ -106,14 +92,12 @@ jobs:
           tags: snippetbox:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
       - name: Run container
         run: |
           docker run -d --name snippetbox -p 3000:3000 \
             -e COOKIE_SECURE=false \
             -v snippetbox-ci-data:/data \
             snippetbox:ci
-
       - name: Wait for health check
         run: |
           for i in $(seq 1 30); do
@@ -124,20 +108,17 @@ jobs:
           done
           docker logs snippetbox
           exit 1
-
       - name: Check pages
         run: |
           for path in / /user/login /user/signup /snippet/create /snippet/view/1; do
             curl -fsS -o /dev/null "http://localhost:3000$path"
           done
-
       - name: Check that the database is writable by the non-root user
         run: |
           curl -fsS -X POST http://localhost:3000/api/signup \
             -H 'Content-Type: application/json' \
             -d '{"name":"CI","email":"ci@example.com","password":"correct-horse"}'
           curl -fsS http://localhost:3000/api/me
-
       - name: Check that data survives a restart
         run: |
           docker restart snippetbox
@@ -148,7 +129,6 @@ jobs:
           curl -fsS -X POST http://localhost:3000/api/login \
             -H 'Content-Type: application/json' \
             -d '{"email":"ci@example.com","password":"correct-horse"}'
-
       - name: Show logs on failure
         if: failure()
         run: docker logs snippetbox
