@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { SignupPage } from "@/modules/identity/client";
+import { SignupForm } from "@/components/signup-form";
 
 export const metadata: Metadata = { title: "Signup" };
 
-export default function Page() {
-  return <SignupPage />;
+export default function SignupPage() {
+  return <SignupForm />;
 }
