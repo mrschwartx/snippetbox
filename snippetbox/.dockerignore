@@ -4,3 +4,9 @@ node_modules
 *.md
 .env*
 data
+tests
+coverage
+test-results
+playwright-report
+vitest.config.mts
+playwright.config.ts
