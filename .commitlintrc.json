@@ -9,22 +9,7 @@
     "scope-enum": [
       2,
       "always",
-      [
-        "snippetbox",
-        "snippet",
-        "user",
-        "identity",
-        "snippets",
-        "flash",
-        "shared",
-        "shell",
-        "bootstrap",
-        "e2e",
-        "architecture",
-        "docker",
-        "ci",
-        "deps"
-      ]
+      ["snippetbox", "docker", "ci", "deps"]
     ],
     "scope-case": [2, "always", "lower-case"],
     "subject-case": [0],

@@ -1,18 +1,17 @@
 services:
-  snippetbox-nextjs:
+  snippetbox:
     build:
       context: ../snippetbox
       dockerfile: ../snippetbox-docker/snippetbox/Dockerfile
-    image: snippetbox-nextjs:local
+    image: snippetbox:local
     container_name: snippetbox
     restart: unless-stopped
     ports:
       - "${PORT:-3000}:3000"
     environment:
-      DATABASE_PATH: /data/snippetbox.db
-      COOKIE_SECURE: "false"
+      COOKIE_SECURE: "${COOKIE_SECURE:-false}"
     volumes:
-      - snippetbox-data:/data
+      - snippetbox-data:/app/data
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/ping"]
       interval: 30s

@@ -12,7 +12,7 @@ docker/down:
 	$(COMPOSE) down
 
 docker/logs:
-	$(COMPOSE) logs -f snippetbox-nextjs
+	$(COMPOSE) logs -f snippetbox
 
 docker/ps:
 	$(COMPOSE) ps

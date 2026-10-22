@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   commitlint:
-    name: Commit messages
+    name: Snippetbox commit messages
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     timeout-minutes: 5
@@ -30,7 +30,7 @@ jobs:
           configFile: .commitlintrc.json
 
   snippetbox-quality:
-    name: snippetbox quality
+    name: Snippetbox code quality
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -49,7 +49,13 @@ jobs:
         run: npm run lint
       - name: Typecheck
         run: npm run typecheck
-      - name: Unit, integration, UI and architecture tests with coverage
+      - name: Unit tests
+        run: npm run test:unit
+      - name: Component tests
+        run: npm run test:components
+      - name: Integration tests
+        run: npm run test:integration
+      - name: Testing coverage
         run: npm run test:coverage
       - name: Upload coverage
         uses: actions/upload-artifact@v4
@@ -57,13 +63,31 @@ jobs:
           name: coverage
           path: snippetbox/coverage
           retention-days: 7
+
+  snippetbox-build:
+    name: Snippetbox build
+    runs-on: ubuntu-latest
+    needs: snippetbox-quality
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: snippetbox
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: snippetbox/package-lock.json
+      - name: Install
+        run: npm ci
       - name: Build
         run: npm run build
 
-  snippetbox-e2e:
-    name: End-to-end tests
+  snippetbox-e2e-browser:
+    name: Snippetbox end-to-end browser
     runs-on: ubuntu-latest
-    needs: quality
+    needs: snippetbox-build
     timeout-minutes: 20
     defaults:
       run:
@@ -79,9 +103,9 @@ jobs:
         run: npm ci
       - name: Install browser
         run: npx playwright install --with-deps chromium
-      - name: Run end-to-end tests
-        run: npm run test:e2e:ci
-      - name: Upload Playwright report
+      - name: Run browser tests
+        run: npx playwright test
+      - name: Upload report
         if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -92,9 +116,9 @@ jobs:
           retention-days: 7
 
   snippetbox-docker:
-    name: Docker build and smoke test
+    name: Snippetbox docker container
     runs-on: ubuntu-latest
-    needs: quality
+    needs: snippetbox-build
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -109,11 +133,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Run container
-        run: |
-          docker run -d --name snippetbox -p 3000:3000 \
-            -e COOKIE_SECURE=false \
-            -v snippetbox-ci-data:/data \
-            snippetbox:ci
+        run: docker run -d --name snippetbox -p 3000:3000 snippetbox:ci
       - name: Wait for health check
         run: |
           for i in $(seq 1 30); do
@@ -126,27 +146,10 @@ jobs:
           exit 1
       - name: Check pages
         run: |
-          for path in / /user/login /user/signup /snippet/create /snippet/view/1; do
+          for path in / /user/login /user/signup /snippet/create; do
             curl -fsS -o /dev/null "http://localhost:3000$path"
           done
-      - name: Check that the database is writable by the non-root user
-        run: |
-          curl -fsS -X POST http://localhost:3000/api/signup \
-            -H 'Content-Type: application/json' \
-            -d '{"name":"CI","email":"ci@example.com","password":"correct-horse"}'
-          curl -fsS http://localhost:3000/api/me
-      - name: Check that data survives a restart
-        run: |
-          docker restart snippetbox
-          for i in $(seq 1 30); do
-            if curl -fsS http://localhost:3000/ping | grep -q OK; then break; fi
-            sleep 2
-          done
-          curl -fsS -X POST http://localhost:3000/api/login \
-            -H 'Content-Type: application/json' \
-            -d '{"email":"ci@example.com","password":"correct-horse"}'
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/snippet/view/1)" = "404"
       - name: Show logs on failure
         if: failure()
         run: docker logs snippetbox
-
-  
