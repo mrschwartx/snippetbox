@@ -5,7 +5,7 @@ import { SiteNav } from "@/components/site-nav";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Snippetbox", template: "%s - Snippetbox" },
+  title: { default: "SnippetBox", template: "%s - SnippetBox" },
   description: "Share short snippets of text and code.",
 };
 
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <header>
           <h1>
-            <Link href="/">Snippetbox</Link>
+            <Link href="/">SnippetBox</Link>
           </h1>
         </header>
         <SiteNav />

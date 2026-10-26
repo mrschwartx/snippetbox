@@ -5,7 +5,7 @@ import { getLatestSnippets } from "@/lib/snippets";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = { title: { absolute: "Home - Snippetbox" } };
+export const metadata: Metadata = { title: { absolute: "Home - SnippetBox" } };
 
 export default function HomePage() {
   const snippets = getLatestSnippets();

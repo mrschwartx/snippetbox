@@ -4,7 +4,7 @@ import { login, newUser, open, PASSWORD, registerAndLogin, signup } from "./help
 test.describe("signup", () => {
   test("shows a title and the expected fields", async ({ page }) => {
     await open(page, "/user/signup");
-    await expect(page).toHaveTitle("Signup - Snippetbox");
+    await expect(page).toHaveTitle("Signup - SnippetBox");
     await expect(page.getByLabel("Name:")).toBeVisible();
     await expect(page.getByLabel("Email:")).toBeVisible();
     await expect(page.getByLabel("Password:")).toBeVisible();
@@ -66,7 +66,7 @@ test.describe("signup", () => {
 test.describe("login", () => {
   test("shows a title and the expected fields", async ({ page }) => {
     await open(page, "/user/login");
-    await expect(page).toHaveTitle("Login - Snippetbox");
+    await expect(page).toHaveTitle("Login - SnippetBox");
     await expect(page.getByLabel("Email:")).toBeVisible();
     await expect(page.getByLabel("Password:")).toBeVisible();
   });
@@ -94,7 +94,7 @@ test.describe("login", () => {
 
   test("signs in and lands on the create snippet page", async ({ page }) => {
     await registerAndLogin(page);
-    await expect(page).toHaveTitle("Create a New Snippet - Snippetbox");
+    await expect(page).toHaveTitle("Create a New Snippet - SnippetBox");
     const nav = page.getByRole("navigation");
     await expect(nav.getByRole("link", { name: "Create snippet" })).toBeVisible();
     await expect(nav.getByRole("button", { name: "Logout" })).toBeVisible();

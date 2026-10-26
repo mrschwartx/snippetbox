@@ -45,7 +45,7 @@ test.describe("creating snippets", () => {
     const title = unique("Haiku");
     await createSnippet(page, { title, content: "line one\nline two\n    indented", expires: "One Week" });
 
-    await expect(page).toHaveTitle(/^Snippet #\d+ - Snippetbox$/);
+    await expect(page).toHaveTitle(/^Snippet #\d+ - SnippetBox$/);
     await expect(page.getByRole("status")).toHaveText("Snippet successfully created!");
     await expect(page.locator(".snippet strong")).toHaveText(title);
     await expect(page.locator(".snippet pre code")).toHaveText("line one\nline two\n    indented");

@@ -50,7 +50,7 @@ describe("HomePage", () => {
   it("is rendered dynamically on every request", async () => {
     const home = await import("@/app/page");
     expect(home.dynamic).toBe("force-dynamic");
-    expect(home.metadata.title).toEqual({ absolute: "Home - Snippetbox" });
+    expect(home.metadata.title).toEqual({ absolute: "Home - SnippetBox" });
   });
 });
 

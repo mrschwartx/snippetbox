@@ -1,4 +1,4 @@
-# Snippetbox (Next.js)
+# SnippetBox (Next.js)
 
 A small app for sharing short snippets of text and code that expire on their own, built as a single Next.js application with a **layered, server-first** structure.
 
@@ -63,7 +63,7 @@ The Docker image sets `DATABASE_PATH` to `/app/data/snippetbox.db`. The local co
 
 ## Architecture
 
-Snippetbox is a single Next.js application split into four layers. Pages and components depend downward on server actions and the `lib` layer, and `lib` depends on nothing else in the app.
+SnippetBox is a single Next.js application split into four layers. Pages and components depend downward on server actions and the `lib` layer, and `lib` depends on nothing else in the app.
 
 ### Project layout
 

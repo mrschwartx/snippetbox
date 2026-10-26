@@ -15,8 +15,8 @@ test.describe("health and basics", () => {
 
   test("home page has the site chrome", async ({ page }) => {
     await page.goto("/");
-    await expect(page).toHaveTitle("Home - Snippetbox");
-    await expect(page.getByRole("heading", { name: "Snippetbox", level: 1 })).toBeVisible();
+    await expect(page).toHaveTitle("Home - SnippetBox");
+    await expect(page.getByRole("heading", { name: "SnippetBox", level: 1 })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Latest Snippets" })).toBeVisible();
     await expect(page.getByRole("contentinfo")).toContainText("Powered by Next.js");
   });

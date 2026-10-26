@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   commitlint:
-    name: Snippetbox commit messages
+    name: SnippetBox commit messages
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     timeout-minutes: 5
@@ -30,7 +30,7 @@ jobs:
           configFile: .commitlintrc.json
 
   snippetbox-quality:
-    name: Snippetbox code quality
+    name: SnippetBox code quality
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -65,7 +65,7 @@ jobs:
           retention-days: 7
 
   snippetbox-build:
-    name: Snippetbox build
+    name: SnippetBox build
     runs-on: ubuntu-latest
     needs: snippetbox-quality
     timeout-minutes: 15
@@ -85,7 +85,7 @@ jobs:
         run: npm run build
 
   snippetbox-e2e-browser:
-    name: Snippetbox end-to-end browser
+    name: SnippetBox end-to-end browser
     runs-on: ubuntu-latest
     needs: snippetbox-build
     timeout-minutes: 20
@@ -116,7 +116,7 @@ jobs:
           retention-days: 7
 
   snippetbox-docker:
-    name: Snippetbox docker container
+    name: SnippetBox docker container
     runs-on: ubuntu-latest
     needs: snippetbox-build
     timeout-minutes: 15
