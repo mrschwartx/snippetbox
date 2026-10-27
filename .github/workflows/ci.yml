@@ -1,9 +1,9 @@
 name: CI
 
 on:
+  pull_request:
   push:
     branches: [main]
-  pull_request:
 
 permissions:
   contents: read
@@ -13,143 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  commitlint:
-    name: SnippetBox commit message
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    timeout-minutes: 5
+  pipeline:
+    uses: ./.github/workflows/_ci.yml
     permissions:
       contents: read
       pull-requests: read
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: wagoid/commitlint-github-action@v6
-        with:
-          configFile: .commitlintrc.json
-
-  snippetbox-quality:
-    name: SnippetBox code quality
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: snippetbox
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: snippetbox/package-lock.json
-      - name: Install
-        run: npm ci
-      - name: Lint
-        run: npm run lint
-      - name: Typecheck
-        run: npm run typecheck
-      - name: Unit tests
-        run: npm run test:unit
-      - name: Component tests
-        run: npm run test:components
-      - name: Integration tests
-        run: npm run test:integration
-      - name: Testing coverage
-        run: npm run test:coverage
-      - name: Upload coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage
-          path: snippetbox/coverage
-          retention-days: 7
-
-  snippetbox-build:
-    name: SnippetBox code build
-    runs-on: ubuntu-latest
-    needs: snippetbox-quality
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: snippetbox
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: snippetbox/package-lock.json
-      - name: Install
-        run: npm ci
-      - name: Build
-        run: npm run build
-
-  snippetbox-e2e-browser:
-    name: SnippetBox end-to-end browser
-    runs-on: ubuntu-latest
-    needs: snippetbox-build
-    timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: snippetbox
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: snippetbox/package-lock.json
-      - name: Install
-        run: npm ci
-      - name: Install browser
-        run: npx playwright install --with-deps chromium
-      - name: Run browser tests
-        run: npx playwright test
-      - name: Upload report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: |
-            snippetbox/playwright-report
-            snippetbox/test-results
-          retention-days: 7
-
-  snippetbox-docker:
-    name: SnippetBox docker container
-    runs-on: ubuntu-latest
-    needs: snippetbox-build
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
-      - name: Build image
-        uses: docker/build-push-action@v6
-        with:
-          context: snippetbox
-          file: snippetbox-docker/snippetbox/Dockerfile
-          load: true
-          tags: snippetbox:ci
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-      - name: Run container
-        run: docker run -d --name snippetbox -p 3000:3000 snippetbox:ci
-      - name: Wait for health check
-        run: |
-          for i in $(seq 1 30); do
-            if curl -fsS http://localhost:3000/ping | grep -q OK; then
-              exit 0
-            fi
-            sleep 2
-          done
-          docker logs snippetbox
-          exit 1
-      - name: Check pages
-        run: |
-          for path in / /user/login /user/signup /snippet/create; do
-            curl -fsS -o /dev/null "http://localhost:3000$path"
-          done
-          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/snippet/view/1)" = "404"
-      - name: Show logs on failure
-        if: failure()
-        run: docker logs snippetbox
