@@ -2,9 +2,7 @@ name: SnippetBox CI
 
 on:
   pull_request:
-    branches: [features, main]
-  push:
-    branches: [features]
+    branches: [main]
 
 permissions:
   contents: read
