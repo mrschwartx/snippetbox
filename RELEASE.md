@@ -8,9 +8,9 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 | ---------------------------------- | ------------------------- | ------------------------------------------------------ |
 | `.github/workflows/commitlint.yml` | Pull request              | Validate commit messages                               |
 | `.github/workflows/ci.yml`         | Pull request, push `main` | Lint, typecheck, unit tests, E2E, container smoke test |
-| `.github/workflows/release.yml`    | Push `main`, manual       | Release PR, verify, CI on tag, Trivy scan, Docker Hub  |
+| `.github/workflows/cd.yml`         | Push `main`, manual       | Release PR, verify, CI on tag, Trivy scan, Docker Hub  |
 
-`release.yml` reuses `ci.yml` to test the exact tag before publishing.
+`cd.yml` reuses `ci.yml` to test the exact tag before publishing.
 
 ## Flow
 
@@ -18,7 +18,7 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 PR opened ─► 1 Commitlint + 2 CI (never publishes)
 
 merge to main ─► 2 CI
-              ─► 3 Release: release-please opens or updates the Release PR
+              ─► 3 CD: release-please opens or updates the Release PR
 Release PR merged ─► tag vX.Y.Z + GitHub Release + CHANGELOG
                   ─► verify ─► CI on tag ─► Trivy scan ─► push to Docker Hub
 ```
