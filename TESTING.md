@@ -4,15 +4,15 @@ All commands run from `snippetbox/`.
 
 ## Layers
 
-| Layer | Tool | Location | Command |
-|---|---|---|---|
-| Lint | ESLint | `src`, `tests` | `npm run lint` |
-| Types | TypeScript | whole project | `npm run typecheck` |
-| Component | Vitest + Testing Library (jsdom) | `tests/components` | `npm run test:components` |
-| Integration | Vitest (node, real SQLite) | `tests/integration` | `npm run test:integration` |
-| Coverage | Vitest + v8 | all Vitest projects | `npm run test:coverage` |
-| End-to-end | Playwright (Chromium) | `tests/e2e` | `npm run test:e2e` |
-| Container smoke | Docker + curl | `snippetbox-docker/` | see below |
+| Layer           | Tool                             | Location             | Command                    |
+| --------------- | -------------------------------- | -------------------- | -------------------------- |
+| Lint            | ESLint                           | `src`, `tests`       | `npm run lint`             |
+| Types           | TypeScript                       | whole project        | `npm run typecheck`        |
+| Component       | Vitest + Testing Library (jsdom) | `tests/components`   | `npm run test:components`  |
+| Integration     | Vitest (node, real SQLite)       | `tests/integration`  | `npm run test:integration` |
+| Coverage        | Vitest + v8                      | all Vitest projects  | `npm run test:coverage`    |
+| End-to-end      | Playwright (Chromium)            | `tests/e2e`          | `npm run test:e2e`         |
+| Container smoke | Docker + curl                    | `snippetbox-docker/` | see below                  |
 
 `npm test` runs every Vitest project. `npm run test:all` adds Playwright.
 
@@ -43,12 +43,12 @@ Expect `OK` from `/ping`, `200` on `/`, `/user/login`, `/user/signup`, `/snippet
 
 `ci.yml` runs on every pull request and push to `main`. `release.yml` runs the same pipeline against the release tag before publishing.
 
-| Job | Runs | Notes |
-|---|---|---|
+| Job          | Runs                       | Notes                                      |
+| ------------ | -------------------------- | ------------------------------------------ |
 | `commitlint` | Conventional Commits check | Pull requests only, skipped for Dependabot |
-| `quality` | lint, typecheck, coverage | Uploads `coverage` artifact |
-| `e2e` | Playwright | Uploads `playwright-report` on failure |
-| `docker` | image build and smoke test | Same checks as above |
+| `quality`    | lint, typecheck, coverage  | Uploads `coverage` artifact                |
+| `e2e`        | Playwright                 | Uploads `playwright-report` on failure     |
+| `docker`     | image build and smoke test | Same checks as above                       |
 
 Jobs run in parallel and all must pass before merge.
 

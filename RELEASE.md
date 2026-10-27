@@ -14,12 +14,12 @@ The Release PR bumps `snippetbox/package.json`, `snippetbox/package-lock.json` a
 
 ## Version bumps
 
-| Commit | Bump |
-|---|---|
-| `fix(scope): ...` | patch |
-| `feat(scope): ...` | minor |
-| `feat(scope)!: ...` or `BREAKING CHANGE:` footer | major |
-| `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore` | none |
+| Commit                                                              | Bump  |
+| ------------------------------------------------------------------- | ----- |
+| `fix(scope): ...`                                                   | patch |
+| `feat(scope): ...`                                                  | minor |
+| `feat(scope)!: ...` or `BREAKING CHANGE:` footer                    | major |
+| `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore` | none  |
 
 Scopes: `snippetbox`, `docker`, `ci`, `deps`. Merge pull requests with **squash** and a conventional title.
 
@@ -35,10 +35,10 @@ Force a version by adding `Release-As: 3.1.0-rc.1` as a footer in a commit on `m
 
 Image: `<DOCKERHUB_USERNAME>/snippetbox`
 
-| Release | Tags |
-|---|---|
-| Stable `v1.2.3` | `1.2.3`, `1.2`, `1`, `latest`, `sha-<7 chars>` |
-| Pre-release `v1.2.3-rc.1` | `1.2.3-rc.1`, `sha-<7 chars>` |
+| Release                   | Tags                                           |
+| ------------------------- | ---------------------------------------------- |
+| Stable `v1.2.3`           | `1.2.3`, `1.2`, `1`, `latest`, `sha-<7 chars>` |
+| Pre-release `v1.2.3-rc.1` | `1.2.3-rc.1`, `sha-<7 chars>`                  |
 
 Version tags are immutable: publishing is refused if the tag already exists. `latest` only moves on stable releases and never on a plain push to `main`.
 
@@ -62,12 +62,12 @@ Deploy the previous version tag (for example `1.2.2`). To fix forward, merge a `
 
 ## One-time setup
 
-| Item | Where | Value |
-|---|---|---|
-| `RELEASE_PLEASE_TOKEN` | Secrets | Fine-grained PAT or GitHub App token with `contents` and `pull-requests` write. Required so Release PRs trigger CI |
-| `DOCKERHUB_USERNAME` | Variables | Docker Hub namespace |
-| `DOCKERHUB_TOKEN` | Environment `dockerhub` secret | Docker Hub access token with read and write |
-| Environment `dockerhub` | Settings → Environments | Optional required reviewers for manual approval |
-| Branch protection on `main` | Settings → Branches | Require PR, squash merge, and checks `pipeline / quality`, `pipeline / e2e`, `pipeline / docker`, `pipeline / commitlint` |
+| Item                        | Where                          | Value                                                                                                                     |
+| --------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `RELEASE_PLEASE_TOKEN`      | Secrets                        | Fine-grained PAT or GitHub App token with `contents` and `pull-requests` write. Required so Release PRs trigger CI        |
+| `DOCKERHUB_USERNAME`        | Variables                      | Docker Hub namespace                                                                                                      |
+| `DOCKERHUB_TOKEN`           | Environment `dockerhub` secret | Docker Hub access token with read and write                                                                               |
+| Environment `dockerhub`     | Settings → Environments        | Optional required reviewers for manual approval                                                                           |
+| Branch protection on `main` | Settings → Branches            | Require PR, squash merge, and checks `pipeline / quality`, `pipeline / e2e`, `pipeline / docker`, `pipeline / commitlint` |
 
 Place `release-please-config.json` and `release-please-manifest.json` at the repository root. Delete `.github/workflows/dockerhub.yml` and the old `ci.yml`.

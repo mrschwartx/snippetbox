@@ -1,4 +1,4 @@
-name: CI
+name: SnippetBox CI
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   pipeline:
-    uses: ./.github/workflows/_ci.yml
+    uses: ./.github/workflows/_testing.yml
     permissions:
       contents: read
       pull-requests: read
