@@ -39,7 +39,6 @@ jobs:
   e2e:
     name: snippetbox e2e
     runs-on: ubuntu-latest
-    needs: quality
     timeout-minutes: 20
     defaults:
       run:
@@ -66,7 +65,7 @@ jobs:
   docker:
     name: snippetbox docker container
     runs-on: ubuntu-latest
-    needs: e2e
+    needs: [quality, e2e]
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
